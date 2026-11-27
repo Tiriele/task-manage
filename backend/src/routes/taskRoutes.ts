@@ -1,3 +1,4 @@
+
 import { Router } from 'express';
 import {
   getTasks,
@@ -10,8 +11,11 @@ import {
 } from '../controllers/taskController.js';
 import { protect } from '../middleware/auth.js';
 import { validate } from '../middleware/validator.js';
+import { taskLimiter } from '../middleware/rateLimiter.js';
 
 const router = Router();
+
+router.use(taskLimiter);
 
 // All routes require authentication
 router.use(protect);
