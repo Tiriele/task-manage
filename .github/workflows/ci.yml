@@ -53,6 +53,12 @@ jobs:
       - name: Lint frontend
         run: npm run lint:frontend
 
+      - name: Build backend Docker image
+        run: docker build -f backend/Dockerfile -t task-management-backend:ci .
+
+      - name: Build frontend Docker image
+        run: docker build --build-arg VITE_API_URL=/api -f frontend/Dockerfile -t task-management-frontend:ci .
+
   codeql:
     name: CodeQL Security Analysis
     runs-on: ubuntu-latest
