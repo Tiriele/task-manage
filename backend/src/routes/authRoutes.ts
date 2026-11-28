@@ -8,6 +8,6 @@ const router = Router();
 
 router.post('/register', authLimiter, validate(registerValidation), register);
 router.post('/login', authLimiter, validate(loginValidation), login);
-router.get('/me', protect, getMe);
+router.get('/me', authLimiter, protect, getMe);
 
 export default router;
