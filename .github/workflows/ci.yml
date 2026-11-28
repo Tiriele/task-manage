@@ -70,8 +70,8 @@ jobs:
           file: backend/Dockerfile
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           tags: |
-            tiriele/task-management-backend:latest
-            tiriele/task-management-backend:${{ github.sha }}
+            Tiriele/task-management-backend:latest
+            Tiriele/task-management-backend:${{ github.sha }}
 
       - name: Build and push frontend image
         uses: docker/build-push-action@v7.4.0
@@ -82,8 +82,8 @@ jobs:
             VITE_API_URL=/api
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           tags: |
-            tiriele/task-management-frontend:latest
-            tiriele/task-management-frontend:${{ github.sha }}
+            Tiriele/task-management-frontend:latest
+            Tiriele/task-management-frontend:${{ github.sha }}
 
   codeql:
     name: CodeQL Security Analysis
