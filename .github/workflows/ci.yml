@@ -53,11 +53,37 @@ jobs:
       - name: Lint frontend
         run: npm run lint:frontend
 
-      - name: Build backend Docker image
-        run: docker build -f backend/Dockerfile -t task-management-backend:ci .
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
 
-      - name: Build frontend Docker image
-        run: docker build --build-arg VITE_API_URL=/api -f frontend/Dockerfile -t task-management-frontend:ci .
+      - name: Login to Docker Hub
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v7.4.0
+        with:
+          context: .
+          file: backend/Dockerfile
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          tags: |
+            tiriele/task-management-backend:latest
+            tiriele/task-management-backend:${{ github.sha }}
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v7.4.0
+        with:
+          context: .
+          file: frontend/Dockerfile
+          build-args: |
+            VITE_API_URL=/api
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          tags: |
+            tiriele/task-management-frontend:latest
+            tiriele/task-management-frontend:${{ github.sha }}
 
   codeql:
     name: CodeQL Security Analysis

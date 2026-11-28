@@ -14,4 +14,4 @@ RUN npm run build:backend
 
 EXPOSE 5000
 
-CMD ["npm", "run", "dev:backend"]
+CMD ["npm", "run", "start", "--workspace", "backend"]
